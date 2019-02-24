@@ -1,13 +1,12 @@
 #include <iostream>
 #include <fstream>
 #include <array>
-#include <chrono>
-#include <ctime>
 
 #include "random_number.cpp"
 
-#include "bubble.h"
-//#include "select_sort.h"
+//#include "bubble_sort.cpp"
+//#include "select_sort.cpp"
+#include "insert_sort.cpp"
 
 #define MIN_SIZE  10
 #define MID_SIZE  100
@@ -18,20 +17,18 @@
 using namespace std;
 
 int main (){
-	//create files with numbers
 	ofstream fout;
 	ifstream fin;
 	
 	array<string, 3> files {"aray_min.txt", "aray_mid.txt", "aray_max.txt"};
+	array<string, 3> algos {"Bubble Sort", "Select Sort", "Insert Sort"};
 	array<int, 3> distr {MIN_SIZE, MID_SIZE, MAX_SIZE};
-	array<double, 3> timer;
+	double timer[3];
 	
+	/*
+	 * create files with random numbers
+	*/
 	
-	array<int, MIN_SIZE> array_min;
-	//array<int, MID_SIZE> array_mid;
-	//array<int, MAX_SIZE> array_max;
-	
-	/*fill files with numbers*/
 	// [1]
 	for(unsigned int j = 0; j < files.size(); ++j){
 		fout.open(files[j], ifstream::trunc);
@@ -45,47 +42,40 @@ int main (){
 		
 	cout << "Files with arrays have been created" << endl;
 	
-	/*applay each sorting algorithm */
+	/*
+	 * applay each sorting algorithm
+	 */
 	
-	
-	
-	fin.open("aray_min.txt");
-	
-	if(fin.is_open()){
-		int number;
-		int i = 0;
-		while(fin >> number){
-			array_min[i] = number;
-			++i;
+	for(unsigned int k = 0; k < files.size(); ++k){
+		fin.open(files[k]);
+		int arr[distr[k]];
+		
+		if(fin.is_open()){
+			int number;
+			int i = 0;
+			while(fin >> number){
+				arr[i] = number;
+				++i;
+			}
+		}else{
+			cout << "file doesnt exists" << endl;
 		}
-	}else{
-		cout << "file doesnt exists" << endl;
+		
+		fin.close();
+		
+		//timer[k] = bubbleSort(arr, distr[k]);
+		//timer[k] = selectSort(arr, distr[k]);
+		timer[k] = insertSort(arr, distr[k]);
 	}
 	
+	cout << "The duration of sorting the arrays for each algorithm is:" << endl;
+	cout << MIN_SIZE << " " << MID_SIZE << " " << MAX_SIZE << endl;
 	
-	
-	/*for(unsigned int i = 0; i < array_min.size(); ++i){
-		cout<< array_min[i] << " ";
-	}*/
-	
-	chrono::time_point<chrono::system_clock> start, end;
-	
-	start = std::chrono::system_clock::now();
-
-	//bubble_Sort(array_min);
-	
-	end = std::chrono::system_clock::now();
-	
-	std::chrono::duration<double> elapsed_seconds = end - start;
-	
-	timer[1] = elapsed_seconds.count();
-	
-	/*cout<<endl << "sorted array:"<< endl;
-	for(unsigned int i = 0; i < array_min.size(); ++i){
-		cout<< array_min[i]<< " ";
-	}*/
-	
-	//cout<< endl << elapsed_seconds.count() << endl;
+	for(int i = 0; i < 3; ++i){
+		cout<< timer[i]<< " ";
+	}
+		
+	cout << endl;
 	
 	return 0;
 }
