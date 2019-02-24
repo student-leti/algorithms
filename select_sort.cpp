@@ -1,18 +1,36 @@
+#include <array>
+//#include <iostream>
+#include <chrono>
 
-
-int k = 0;
-int temp = 0;
-for(unsigned int i = 0; i < array_min.size()-1; ++i){
-	k = i+1;
-	while(k < int(array_min.size())){
-		if(array_min[k] < array_min[i]){
-			temp = array_min[k];
-			array_min[k] = array_min[i];
-			array_min[i] = temp;
+double selectSort(int *arr, int size){
+	using std::chrono::system_clock;
+	
+	system_clock::time_point start, end;
+	
+	start = system_clock::now();
+	
+	int k = 0;
+	int temp = 0;
+	
+	for(int i = 0; i < size - 1; ++i){
+		k = i+1;
+		while(k < size){
+			if(arr[k] < arr[i]){
+				temp = arr[k];
+				arr[k] = arr[i];
+				arr[i] = temp;
+			}
+			++k;
 		}
-		++k;
 	}
+	
+	end = system_clock::now();
+	
+	std::chrono::duration<double> elapsed_seconds = (end - start);
+
+	return elapsed_seconds.count();
 }
+
 
 
 
